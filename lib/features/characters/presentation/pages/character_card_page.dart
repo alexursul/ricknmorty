@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
 
 import '../../domain/models/character.dart';
-import '../state/fav_list.dart';
 import '../widgets/character_image_hero.dart';
+import '../widgets/fav_button.dart';
 
 class CharacterCardPage extends StatelessWidget {
   final Character character;
@@ -23,31 +21,12 @@ class CharacterCardPage extends StatelessWidget {
       body: ListView(
         children: [
           CharacterImageHero(character: character),
-          Observer(
-            builder: (context) {
-              final characterIsFavorite = context.read<FavList>().characterIds.contains(character.id);
-
-              return ListTile(
-                title: Text(
-                  character.name,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                trailing: IconButton(
-                  icon: Icon(
-                    characterIsFavorite ? Icons.star : Icons.star_outline,
-                    color: Colors.amber,
-                    size: 28,
-                  ),
-                  onPressed: () {
-                    if (characterIsFavorite) {
-                      context.read<FavList>().removeFromFavList(id: character.id);
-                    } else {
-                      context.read<FavList>().addToFavList(id: character.id);
-                    }
-                  },
-                ),
-              );
-            },
+          ListTile(
+            title: Text(
+              character.name,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            trailing: FavButton(characterId: character.id),
           ),
           const Divider(color: Colors.black, height: 2),
           ListTile(
